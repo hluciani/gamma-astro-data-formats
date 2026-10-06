@@ -86,10 +86,22 @@ with the direction inside the field of view. The effective area is given as a
 function of the **true** source direction relative to the array pointing
 position.
 
-As for ``AEFF_2D``, only the full-enclosure case is specified here, i.e.
-``HDUCLAS3`` must be ``'FULL-ENCLOSURE'`` (see :ref:`full-enclosure-irfs`).
-A point-like 3-dimensional effective area is not defined by this specification;
-point-like effective areas are given as ``AEFF_2D`` (see :ref:`aeff_2d`).
+``HDUCLAS3`` must be either ``'FULL-ENCLOSURE'`` (see :ref:`full-enclosure-irfs`)
+or ``'POINT-LIKE'`` (see :ref:`point-irfs`).
+
+For point-like IRFs computed from point-like simulations of an on-axis source,
+``AEFF_3D`` is not possible and not required: the effective area does not depend
+on the position in the field of view, so ``AEFF_2D`` should be used instead
+(see :ref:`aeff_2d`).
+
+For point-like IRFs computed from diffuse gamma-ray simulations with a
+directional (spatial) cut applied, the effective area can be calculated as a
+function of true energy and field of view coordinates, i.e. ``AEFF_3D`` can be
+used with ``HDUCLAS3 = 'POINT-LIKE'``. The directional cut applied to compute
+the effective area must be specified via the ``RAD_MAX`` header keyword or a
+``RAD_MAX_2D`` HDU (see :ref:`rad_max`). A single bin in ``DETX`` and ``DETY``
+covering the field of view is an appropriate choice in this case; this is only
+a suggestion, the field of view binning is left to the producer.
 
 Required columns:
 +++++++++++++++++
@@ -120,7 +132,7 @@ declare the type of HDU:
 * ``HDUCLASS`` = 'GADF'
 * ``HDUCLAS1`` = 'RESPONSE'
 * ``HDUCLAS2`` = 'EFF_AREA'
-* ``HDUCLAS3`` = 'FULL-ENCLOSURE'
+* ``HDUCLAS3`` = 'FULL-ENCLOSURE' / 'POINT-LIKE'
 * ``HDUCLAS4`` = 'AEFF_3D'
 
 Further header keywords:
